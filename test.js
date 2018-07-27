@@ -50,7 +50,9 @@ setInterval(function() {
 
 }, 4000);
 
+server.listen(config.port, config.ip);
 var io = require('socket.io').listen(server);
+
 io.sockets.on('connection', function (socket) {
 	setInterval(function() {
 		socket.emit('data', { 
@@ -62,4 +64,3 @@ io.sockets.on('connection', function (socket) {
 	}, 1000);
 });
 
-server.listen(config.port, config.ip);
