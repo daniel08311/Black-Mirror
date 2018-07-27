@@ -40,7 +40,7 @@
         
         $('#estTimestamp').html(years + " years " + days + " days, " + hours + ":" + minutes + ":" + seconds);
         $('#bets').text("Total " + message.bets + " Bets");
-        $('#price').text(message.price + " Ethers per Bet");
+        $('#price').text(message.price);
       })
     </script>
 
@@ -66,9 +66,8 @@
       </div>
 
       <div class="row justify-content-md-center my-2">
-        <H4 id="price">
-          0 Ethers per Bet
-        </H4>
+        <H4 id="price">0</H4>
+        <H4>&nbsp;Ethers per Bet</H4>
       </div>
 
       <div class="row justify-content-md-center">
@@ -113,7 +112,6 @@
           <div id="response"></div>
       </div>
 
-
     </div>
 
     <script>
@@ -129,7 +127,7 @@
       var bet_history = [];
       var bet_timestamp = [];
       function send() {
-        console.log(bet_timestamp);
+        price = document.getElementById('price').innerHTML;
         Contract.bet(bet_timestamp,"0xF658FffD6Cc732FaD39c9DDeB4a69aA7Ddd3c43f",{
             from:web3.eth.coinbase,
             gas: 400000*count,
@@ -154,7 +152,6 @@
         if (guess != ""){
           bet_history.push(guess);  
           bet_timestamp.push(parseInt(Date.parse(guess)/1000));
-          console.log(bet_timestamp);
           history_html = "<h4 style='text-align:center' >Your Bets :</h4>";
           for (var i = 0; i < bet_history.length; i++){
               history_html += "<h5 style='text-align:center'>" + bet_history[i] + "</h5>";
