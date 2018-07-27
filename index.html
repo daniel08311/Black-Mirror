@@ -18,27 +18,27 @@
       socket.on('data', function(message) {
         $('#prize').text("Current Reward Pool : " + message.reward + " Ethers");
         $('#players').text("Total Players : " + message.players);
+        var years, days, hours, minutes, seconds;
+        
+        if (message.estTimestamp > 0) {
+          message.estTimestamp = (message.estTimestamp - Date.now())/1000;
+        	var timestamp = message.estTimestamp;
 
-        message.estTimestamp = (message.estTimestamp - Date.now())/1000;
-      	var timestamp = message.estTimestamp;
+        	function component(x, v) {
+        	    return Math.floor(x / v);
+        	}
 
-      	function component(x, v) {
-      	    return Math.floor(x / v);
-      	}
-
-
-        var years   = component(timestamp, 24 * 60 * 60 * 365),
-            days    = component(timestamp, 24 * 60 * 60) % 365,// calculate days from timestamp
-            hours   = component(timestamp,      60 * 60) % 24, // hours
-            minutes = component(timestamp,           60) % 60, // minutes
-            seconds = component(timestamp,            1) % 60; // seconds
-
-          // $div.html(days + " days, " + hours + ":" + minutes + ":" + seconds); // display
-
-
-        // $('#estTimestamp').text("Trump Stops Breathing in : " + message.estTimestamp + " Days");
+          years   = component(timestamp, 24 * 60 * 60 * 365),
+          days    = component(timestamp, 24 * 60 * 60) % 365,// calculate days from timestamp
+          hours   = component(timestamp,      60 * 60) % 24, // hours
+          minutes = component(timestamp,           60) % 60, // minutes
+          seconds = component(timestamp,            1) % 60; // seconds
+        }
+        
+        else
+          years=0, days=0, hours=0, minutes=0, seconds=0;
+        
         $('#estTimestamp').html(years + " years " + days + " days, " + hours + ":" + minutes + ":" + seconds);
-
         $('#bets').text("Bets : " + message.bets);
       })
     </script>
@@ -54,7 +54,7 @@
 
       <div class="row justify-content-md-center my-2">
         <H3 id="estTimestamp">
-             - years
+          0 years 0 days, 00:00:00
         </H3>
       </div>
 
