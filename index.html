@@ -14,7 +14,7 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script>
-      var socket = io.connect('http://localhost:8080');
+      var socket = io.connect('http://192.168.1.104:8080');
       socket.on('data', function(message) {
         $('#prize').text("Current Reward Pool : " + message.reward + " Ethers");
         $('#players').text("Total Players : " + message.players);    
@@ -93,7 +93,7 @@
             value: web3.toWei(0.02, 'ether')
           },function(error, result) {
           if (!error) {
-            document.getElementById('response').innerHTML = 'Success: <a href="https://testnet.etherscan.io/tx/' + result + '"> View Transaction </a>'
+            document.getElementById('response').innerHTML = 'Success: <a target="_blank" href="https://ropsten.etherscan.io/tx/' + result + '"> View Transaction </a>'
           } else {
             document.getElementById('response').innerHTML = '<pre>' + error + '</pre>'
           }
