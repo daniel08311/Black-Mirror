@@ -17,7 +17,6 @@
       var socket = io.connect();
       socket.on('data', function(message) {
         $('#prize').text("Reward Pool : " + message.reward + " Ethers");
-        $('#players').text("Total " + message.players + " Players");
         var years, days, hours, minutes, seconds;
 
         if (message.estTimestamp > 0) {
@@ -37,9 +36,6 @@
 
         else
           years=0, days=0, hours=0, minutes=0, seconds=0;
-
-        $('#estTimestamp').html(years + " years " + days + " days, " + hours + " hours " + minutes + " minutes " + seconds + " seconds");
-        $('#bets').text("Total " + message.bets + " Bets");
         $('#price').text(message.price);
       })
     </script>
@@ -48,7 +44,7 @@
     <div class="container">
       <div class="row justify-content-md-center my-2" >
         <H1>
-          Ethereum Deadpool - Donald Trump
+          The Ethereum Deadpool - Donald Trump
         </H1>
         <div id="meta-mask-required"></div>
       </div>
