@@ -1,0 +1,166 @@
+<html>
+  <head>
+     <title>Black Mirror</title>
+      <!-- Latest compiled and minified CSS -->
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+      <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  </head>
+  <body>
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io.connect();
+      socket.on('data', function(message) {
+        $('#prize').text("Reward Pool : " + message.reward + " Ethers");
+        $('#players').text("Total " + message.players + " Players");
+        var years, days, hours, minutes, seconds;
+
+        if (message.estTimestamp > 0) {
+          message.estTimestamp = (message.estTimestamp*1000 - Date.now())/1000;
+        	var timestamp = message.estTimestamp;
+
+        	function component(x, v) {
+        	    return Math.floor(x / v);
+        	}
+
+          years   = component(timestamp, 24 * 60 * 60 * 365),
+          days    = component(timestamp, 24 * 60 * 60) % 365,// calculate days from timestamp
+          hours   = component(timestamp,      60 * 60) % 24, // hours
+          minutes = component(timestamp,           60) % 60, // minutes
+          seconds = component(timestamp,            1) % 60; // seconds
+        }
+
+        else
+          years=0, days=0, hours=0, minutes=0, seconds=0;
+
+        $('#estTimestamp').html(years + " years " + days + " days, " + hours + " hours " + minutes + " minutes " + seconds + " seconds");
+        $('#bets').text("Total " + message.bets + " Bets");
+        $('#price').text(message.price);
+      })
+    </script>
+
+
+    <div class="container">
+      <div class="row justify-content-md-center my-2" >
+        <H1>
+          Ethereum Deadpool - Donald Trump
+        </H1>
+        <div id="meta-mask-required"></div>
+      </div>
+
+      <div class="row justify-content-md-center my-2">
+        <img src="https://cdn.steemitimages.com/DQma2t28aGMBqRxbxz5FnJqJmrMQUJEB8mSqPAZEDpEr4r1/image.png" height="40%"></img>
+      </div>
+      <div class="row justify-content-md-center my-2">
+        <blockquote class="blockquote">
+          <p class="mb-0"><cite> "Everything in life is Luck."</cite></p>
+          <footer class="blockquote-footer"><cite>Donald Trump</cite> </footer>
+        </blockquote>
+      </div>
+
+      <div class="row justify-content-md-center my-2">
+        <H3 id="prize">
+          Reward Pool : 0 Ethers
+        </H3>
+      </div>
+
+      <div class="row justify-content-md-center my-2">
+        <h4><span id="price">0</span></h4>
+        <H4>&nbsp;Ethers per Bet</H4>
+      </div>
+
+      <div class="row justify-content-md-center my-2">
+        <div class="col-md-4">
+          <div class="input-group mb-3">
+            <input id="guess" type="text" style="text-align:center" class="datepick form-control" placeholder="Your Guess" aria-label="Your Guess" aria-describedby="button-addon2">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary" onclick="add()">Add</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row justify-content-md-center my-2">
+          <h4 id="count">0</h4>
+          <h4>&nbsp;Bets</h4>
+      </div>
+
+       <div class="row justify-content-md-center my-2">
+          <div id="history">
+            <h4>Your Bets :</h4>
+          </div>
+      </div>
+
+      <div class="row justify-content-md-center my-2">
+          <button class="btn btn-outline-secondary" onclick="send()">Bet</button>
+      </div>
+
+      <div class="row justify-content-md-center my-2">
+          <div id="response"></div>
+      </div>
+
+    </div>
+
+    <script>
+      // MetaMask injects the web3 library for us.
+      window.onload = function() {
+        if (typeof web3 === 'undefined') {
+          document.getElementById('meta-mask-required').innerHTML = 'You need <a href="https://metamask.io/">MetaMask</a> browser plugin to run this example'
+        }
+      }
+      var abi = [ { "anonymous": false, "inputs": [ { "indexed": true, "name": "player", "type": "address" }, { "indexed": false, "name": "reward", "type": "uint256" } ], "name": "Payreward", "type": "event" }, { "constant": false, "inputs": [ { "name": "_timestamp", "type": "uint256" } ], "name": "announce", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "_timestamps", "type": "uint256[]" }, { "name": "_referral", "type": "address" } ], "name": "bet", "outputs": [], "payable": true, "stateMutability": "payable", "type": "function" }, { "constant": false, "inputs": [], "name": "confirm", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "player", "type": "address" } ], "name": "Confirm", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "bets", "type": "uint256" }, { "indexed": true, "name": "player", "type": "address" } ], "name": "Bet", "type": "event" }, { "payable": true, "stateMutability": "payable", "type": "fallback" }, { "inputs": [], "payable": true, "stateMutability": "payable", "type": "constructor" }, { "constant": true, "inputs": [], "name": "announced", "outputs": [ { "name": "", "type": "bool" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "announcedTimeStamp", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "averageTimestamp", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "address" }, { "name": "", "type": "uint256" } ], "name": "betHistory", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "confirmed", "outputs": [ { "name": "", "type": "bool" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "confirmreward", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "costPerTicket", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "countBet", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "countConfirmed", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "countLeaderBets", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "countPlayer", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "address" } ], "name": "countReferral", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "countSecondWinners", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "countWinners", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "expireDate", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "_timestamp", "type": "uint256" } ], "name": "getBetsOnTimestamp", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "address" } ], "name": "hasConfirmed", "outputs": [ { "name": "", "type": "bool" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "address" } ], "name": "isPlayer", "outputs": [ { "name": "", "type": "bool" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "leader", "outputs": [ { "name": "", "type": "address" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "maxCost", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "numOfConfirmationNeeded", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "owner", "outputs": [ { "name": "", "type": "address" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "address" } ], "name": "playerBets", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "address" } ], "name": "referral", "outputs": [ { "name": "", "type": "address" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "rewardPool", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "secondWinnerTimestamp", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "startDate", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "uint256" } ], "name": "timestampList", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "winnerTimestamp", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" } ];
+      var Contract = web3.eth.contract(abi).at("0xb6451c1ae9dd12a1abb85257c7a022a990a737b6");
+      var count = parseInt(document.getElementById('count').innerHTML);
+      var bet_history = [];
+      var bet_timestamp = [];
+      function send() {
+        price = document.getElementById('price').innerHTML;
+        Contract.bet(bet_timestamp,"0xF658FffD6Cc732FaD39c9DDeB4a69aA7Ddd3c43f",{
+            from:web3.eth.coinbase,
+            gas: 400000*count,
+            gasPrice: web3.toWei(3, 'gwei'),
+            value: web3.toWei(price*count, 'ether')
+          },function(error, result) {
+            bet_timestamp = [];
+            bet_history = [];
+            count = 0;
+            document.getElementById('history').innerHTML = "<h4>Your Bets : </h4>";
+            document.getElementById('count').innerHTML = count;
+            if (!error) {
+              document.getElementById('response').innerHTML = 'Success: <a target="_blank" href="https://ropsten.etherscan.io/tx/' + result + '"> View Transaction </a>'
+            } else {
+              document.getElementById('response').innerHTML = '<pre>' + error + '</pre>'
+            }
+        });
+      };
+      function add() {
+        count += 1;
+        var guess = document.getElementById('guess').value;
+        if (guess != ""){
+          bet_history.push(guess);
+          bet_timestamp.push(parseInt(Date.parse(guess)/1000));
+          history_html = "<h4 style='text-align:center' >Your Bets :</h4>";
+          for (var i = 0; i < bet_history.length; i++){
+              history_html += "<h5 style='text-align:center'>" + bet_history[i] + "</h5>";
+          }
+          document.getElementById('history').innerHTML = history_html;
+          document.getElementById('count').innerHTML = count;
+        }
+        else
+          document.getElementById('history').innerHTML = "Please guess a date";
+      };
+    </script>
+
+    <script>
+      $(document).ready(function() {
+        $('.datepick').flatpickr({minDate: "today" });
+      });
+    </script>
+
+  </body>
+</html>
