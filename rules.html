@@ -50,7 +50,7 @@
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
           <a class="nav-item nav-link " href="/">Home <span class="sr-only">(current)</span></a>
-          <a class="nav-item nav-link active" href="#">Rules <span class="sr-only">(current)</span></a>
+          <a class="nav-item nav-link active" href="#">Rules</a>
           <a class="nav-item nav-link" href="/bet">Play</a>
           <a class="nav-item nav-link" href="/leaderboard">Leaderboard</a>
         </div>
@@ -81,15 +81,18 @@
       <div class="row">
         <div class="col-md-8 offset-md-2">
           <hr>
-          <li> This is just for entertainment. Pick a good date, and earn ETH if you're lucky! </li>
-          <li> The pirce of each bet will increase every 7 days(0.03 max).  You're encouraged to place multiple bets within a single transaction to avoid high transaction fee. </li>
+          <li> In short, we're trying to predict when will our president go to heaven. As he said, <b>try your luck!</b> </li>
+          <li> The price of each bet will increase every 7 days (til 0.03 max).  You're encouraged to place multiple bets within a single transaction to decrease transaction fee. </li>
           <li> No bet will be accepted after Dec 1, 2018. (Standard Timestamp: 1543622400)</li>
           <li> If more than one player bet on the same timestamp, the prize will be devided equally by all the players.</li>
           <li> When that big day comes, we(the contract owner) will trigger the <b>announce()</b> function on the smart contract. After the timestamp is announced, we need 100 more players(who had placed at least 1 bet in the contract) to trigger the <b> confirm() </b> function to verify the date. All these 100 players will share 5% of the total rewards.</li>
           <li> The referrals of the winners get 10% of the prize.
-          <li> The top 3 players who placed the most bets will get 4%, 2.5%, 1.5% of the total reward respectively. </li>
+          <li> The top 3 players who placed the most bets will get 4%, 2.5%, 1.5% of the total reward respectively. <a href="#" class="btn btn-link" data-toggle="modal" data-target="#exampleModalCenter">Click here for detail about Reward Distribution</a></li>
+          <li> Good Luck.</li>
         </div>
       </div>
+
+
 
       <div class="row justify-content-md-center my-2">
         <form action="/bet" method="get">
@@ -101,6 +104,31 @@
           <div id="response"></div>
       </div>
 
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Reward Distribution</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <ul>
+              <li> 50% First Prize </li>
+              <li> 25% Second Prize </li>
+              <li> 8%  Top 3 on Leaderboard </li>
+              <li> 5%  Confirmation Reward </li>
+              <li> 12% Development </li>
+            </ul>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
     </div>
     <script>
       // MetaMask injects the web3 library for us.

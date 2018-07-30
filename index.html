@@ -1,6 +1,6 @@
 <html>
   <head>
-     <title>{{title}}</title>
+     <title>ETH Deadpool</title>
       <!-- Latest compiled and minified CSS -->
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
       <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
@@ -79,16 +79,20 @@
       </div>
       <div class="row justify-content-md-center my-2">
         <p>
-          Predict a deadline for Donald Trump and get ETH rewards.
+          Predict a deadline for Donald Trump and get ETH rewards if you're correct.
         </p>
         <div id="meta-mask-required"></div>
-
+      </div>
+      <div  class="row justify-content-md-center my-2">
+        <form action="/rules" method="get">
+          <input hidden name="ref" id="ref" value="0x12345">
+          <button type='submit' class="btn btn-outline-secondary">More Detail about Rules</button>
+        </form>
       </div>
 
       <div class="row justify-content-md-center my-2">
         <p> Average Prediction Countdown: </p>
-        <span id="estTimestamp">
-          0 years 0 days, 00 hours 00 minutes 00 seconds </span>
+        <span id="estTimestamp">0 years 0 days, 00 hours 00 minutes 00 seconds </span>
       </div>
 
       <div class="row justify-content-md-center my-2">
@@ -96,20 +100,11 @@
           Reward Pool : 0 Ethers
         </H3>
       </div>
-      <div class="row justify-content-md-center my-2">
-        <ul>
-          <li> 50% First Prize </li>
-          <li> 25% Second Prize </li>
-          <li> 8%  Leaderboard </li>
-          <li> 5%  Confirmation Reward </li>
-          <li> 12% Development </li>
-        </ul>
-      </div>
 
       <div class="row justify-content-md-center">
-        <H5 id="players">
+        <H4 id="players">
           0 Players, 0 Bets
-        </H5>
+        </H4>
       </div>
 
       <div class="row justify-content-md-center my-2">
