@@ -19,7 +19,7 @@
         $('#prize').text("Reward Pool : " + message.reward + " Ethers");
         $('#players').text("Total " + message.players + " Players");
         var years, days, hours, minutes, seconds;
-        
+
         if (message.estTimestamp > 0) {
           message.estTimestamp = (message.estTimestamp*1000 - Date.now())/1000;
         	var timestamp = message.estTimestamp;
@@ -34,11 +34,11 @@
           minutes = component(timestamp,           60) % 60, // minutes
           seconds = component(timestamp,            1) % 60; // seconds
         }
-        
+
         else
           years=0, days=0, hours=0, minutes=0, seconds=0;
-        
-        $('#estTimestamp').html(years + " years " + days + " days, " + hours + ":" + minutes + ":" + seconds);
+
+        $('#estTimestamp').html(years + " years " + days + " days, " + hours + " hours " + minutes + " minutes " + seconds + " seconds");
         $('#bets').text("Total " + message.bets + " Bets");
         $('#price').text(message.price);
       })
@@ -46,17 +46,34 @@
 
 
     <div class="container">
-      <div class="row justify-content-md-center my-2">
+      <div class="row justify-content-md-center my-2" >
         <H1>
-          Devil lies deep within us
+          Ethereum Deadpool - Donald Trump
         </H1>
         <div id="meta-mask-required"></div>
       </div>
 
       <div class="row justify-content-md-center my-2">
-        <H3 id="estTimestamp">
-          0 years 0 days, 00:00:00
-        </H3>
+        <img src="https://cdn.steemitimages.com/DQma2t28aGMBqRxbxz5FnJqJmrMQUJEB8mSqPAZEDpEr4r1/image.png" height="40%"></img>
+      </div>
+      <div class="row justify-content-md-center my-2">
+        <blockquote class="blockquote">
+          <p class="mb-0"><cite> "Everything in life is Luck."</cite></p>
+          <footer class="blockquote-footer"><cite>Donald Trump</cite> </footer>
+        </blockquote>
+      </div>
+      <div class="row justify-content-md-center my-2">
+        <p>
+          Predict a deadline for Donald Trump and get ETH rewards.
+        </p>
+        <div id="meta-mask-required"></div>
+
+      </div>
+
+      <div class="row justify-content-md-center my-2">
+        <p> Average Prediction Countdown: </p>
+        <span id="estTimestamp">
+          0 years 0 days, 00 hours 00 minutes 00 seconds </span>
       </div>
 
       <div class="row justify-content-md-center my-2">
@@ -66,7 +83,8 @@
       </div>
 
       <div class="row justify-content-md-center my-2">
-        <H4 id="price">0</H4>
+        <h5>  </h5>
+        <span id="price">0</span>
         <H4>&nbsp;Ethers per Bet</H4>
       </div>
 
@@ -106,7 +124,7 @@
 
       <div class="row justify-content-md-center my-2">
           <button class="btn btn-outline-secondary" onclick="send()">Bet</button>
-      </div>             
+      </div>
 
       <div class="row justify-content-md-center my-2">
           <div id="response"></div>
@@ -150,7 +168,7 @@
         count += 1;
         var guess = document.getElementById('guess').value;
         if (guess != ""){
-          bet_history.push(guess);  
+          bet_history.push(guess);
           bet_timestamp.push(parseInt(Date.parse(guess)/1000));
           history_html = "<h4 style='text-align:center' >Your Bets :</h4>";
           for (var i = 0; i < bet_history.length; i++){
