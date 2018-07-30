@@ -10,18 +10,51 @@ var http = require('http');
 var fs = require('fs');
 var express = require('express');
 var path    = require("path");
+var bodyParser = require('body-parser');
+
 var app = express();
 
+app.use(bodyParser.urlencoded({ extended: true }));
+
+
+var owner = "0x12345";
+
 app.get('/', function (req, res) {
-   res.sendFile(path.join(__dirname+'/index.html'));
+	var ref = owner;
+	if(req.query.ref)
+		ref = req.query.ref;
+	res.sendFile(path.join(__dirname+'/index.html'));
+	io.sockets.on('connection', function (socket) {
+		socket.emit('ref', {
+			referral : ref
+		});
+	});
 })
 
+app.post('/bet',function(req,res){
+	var ref = owner;
+	if(req.query.ref!=ref)
+		ref = req.body.ref;
+	res.sendFile(path.join(__dirname+'/bet.html'));
+	io.sockets.on('connection', function (socket) {
+		socket.emit('ref', {
+			referral : ref
+		});
+	});
+});
+
 app.get('/bet',function(req,res){
-  res.sendFile(path.join(__dirname+'/bet.html'));
+	var ref = owner;
+	res.sendFile(path.join(__dirname+'/bet.html'));
+	io.sockets.on('connection', function (socket) {
+		socket.emit('ref', {
+			referral : ref
+		});
+	});
 });
 
 app.get('/leaderboard',function(req,res){
-  res.sendFile(path.join(__dirname+'/leaderboard.html'));
+	res.sendFile(path.join(__dirname+'/leaderboard.html'));
 });
 
 var config = JSON.parse(fs.readFileSync('server-config.json', 'utf8'));
@@ -54,7 +87,7 @@ setInterval(function() {
 	update(Contract, "countPlayer", "players");
 	update(Contract, "countBet", "betCount");
 	update(Contract, "costPerTicket","price");
-  update(Contract, "leader","leader");
+	update(Contract, "leader","leader");
 	console.log("Current Clients : " + io.engine.clientsCount);
 
 }, 4000);

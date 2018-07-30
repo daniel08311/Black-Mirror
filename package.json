@@ -9,7 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.18.3",
     "fs": "0.0.1-security",
+    "pug": "^2.0.3",
     "socket.io": "^2.1.1",
     "web3": "^1.0.0-beta.34"
   }

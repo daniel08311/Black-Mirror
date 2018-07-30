@@ -1,6 +1,6 @@
 <html>
   <head>
-     <title>ETH Deadpool</title>
+     <title>{{title}}</title>
       <!-- Latest compiled and minified CSS -->
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
       <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
@@ -15,6 +15,9 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
       var socket = io.connect();
+      socket.on('ref', function(message) {
+        document.getElementById('ref').value = message.referral;
+      });
       socket.on('data', function(message) {
         $('#prize').text("Reward Pool : " + message.reward + " Ethers");
         $('#players').text(message.players + " Players, " + message.bets + " Bets");
@@ -109,7 +112,8 @@
       </div>
 
       <div class="row justify-content-md-center my-2">
-        <form action="/bet" method="get">
+        <form action="/bet" method="post">
+          <input hidden name="ref" id="ref" value="0x12345">
           <button type='submit' class="btn btn-outline-secondary">Get Started</button>
         </form>
       </div>
