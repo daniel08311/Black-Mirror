@@ -85,40 +85,44 @@
 
       <div class="container">
         <div class="row">
-          <div class="col-sm justify-content-md-center" style="text-align:center">
+          <div class="col-sm-4 justify-content-md-center" style="text-align:center">
             <h4> Referrals </h4>
+            <div class="row justify-content-md-center my-2">
+               <p>Your Referrals: <span id="count_ref">0</span></p>
+           </div>
           </div>
-          <div class="col-sm justify-content-md-center" style="text-align:center">
-            <h4> Bet Now! </h4>
-          </div>
-          <div class="col-sm justify-content-md-center" style="text-align:center">
-            <h4> Your Bet History </h4>
-          </div>
-        </div>
-      </div>
 
-      <div class="row justify-content-md-center my-2">
-        <div class="col-md-4">
-          <div class="input-group mb-3">
-            <input id="guess" type="text" style="text-align:center" class="datepick form-control" placeholder="Your Guess" aria-label="Your Guess" aria-describedby="button-addon2">
-            <div class="input-group-append">
-              <button class="btn btn-outline-secondary" onclick="add()">Add</button>
+          <div class="col-sm-4 justify-content-md-center" style="text-align:center">
+            <h4> Bet Now! </h4>
+            <div class="row ">
+                <div class="input-group mb-3">
+                  <input id="guess" type="text" style="text-align:center" class="datepick form-control" placeholder="Your Guess" aria-label="Your Guess" aria-describedby="button-addon2">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" onclick="add()">Add</button>
+                  </div>
+                </div>
+
+            </div>
+             <div class="row justify-content-md-center my-2">
+                <div id="history">
+                  <h4><span id="count">0</span> Bets</h4>
+                </div>
+            </div>
+            <div class="row justify-content-md-center my-2">
+                <button class="btn btn-outline-secondary" onclick="send()">Bet</button>
+            </div>
+            <div class="row justify-content-md-center my-2">
+              <p id="response"></p>
             </div>
           </div>
-        </div>
-      </div>
-       <div class="row justify-content-md-center my-2">
-          <div id="history">
-            <h4>Your Bets <span id="count">0</span>:</h4>
+
+          <div class="col-sm-4 justify-content-md-center" style="text-align:center">
+            <h4> Your Bet History </h4>
+            <div class="row justify-content-md-center my-2">
+               <p>You have: <span id="count_bets">0</span> bets.</p>
+           </div>
           </div>
-      </div>
-
-      <div class="row justify-content-md-center my-2">
-          <button class="btn btn-outline-secondary" onclick="send()">Bet</button>
-      </div>
-
-      <div class="row justify-content-md-center my-2">
-          <div id="response"></div>
+        </div>
       </div>
 
     </div>
@@ -132,6 +136,27 @@
       }
       var abi = [ { "anonymous": false, "inputs": [ { "indexed": true, "name": "player", "type": "address" }, { "indexed": false, "name": "reward", "type": "uint256" } ], "name": "Payreward", "type": "event" }, { "constant": false, "inputs": [ { "name": "_timestamp", "type": "uint256" } ], "name": "announce", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "_timestamps", "type": "uint256[]" }, { "name": "_referral", "type": "address" } ], "name": "bet", "outputs": [], "payable": true, "stateMutability": "payable", "type": "function" }, { "constant": false, "inputs": [], "name": "confirm", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "player", "type": "address" } ], "name": "Confirm", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "bets", "type": "uint256" }, { "indexed": true, "name": "player", "type": "address" } ], "name": "Bet", "type": "event" }, { "payable": true, "stateMutability": "payable", "type": "fallback" }, { "inputs": [], "payable": true, "stateMutability": "payable", "type": "constructor" }, { "constant": true, "inputs": [], "name": "announced", "outputs": [ { "name": "", "type": "bool" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "announcedTimeStamp", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "averageTimestamp", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "address" }, { "name": "", "type": "uint256" } ], "name": "betHistory", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "confirmed", "outputs": [ { "name": "", "type": "bool" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "confirmreward", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "costPerTicket", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "countBet", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "countConfirmed", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "countLeaderBets", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "countPlayer", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "address" } ], "name": "countReferral", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "countSecondWinners", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "countWinners", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "expireDate", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "_timestamp", "type": "uint256" } ], "name": "getBetsOnTimestamp", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "address" } ], "name": "hasConfirmed", "outputs": [ { "name": "", "type": "bool" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "address" } ], "name": "isPlayer", "outputs": [ { "name": "", "type": "bool" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "leader", "outputs": [ { "name": "", "type": "address" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "maxCost", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "numOfConfirmationNeeded", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "owner", "outputs": [ { "name": "", "type": "address" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "address" } ], "name": "playerBets", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "address" } ], "name": "referral", "outputs": [ { "name": "", "type": "address" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "rewardPool", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "secondWinnerTimestamp", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "startDate", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "uint256" } ], "name": "timestampList", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "winnerTimestamp", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" } ];
       var Contract = web3.eth.contract(abi).at("0xb6451c1ae9dd12a1abb85257c7a022a990a737b6");
+      function getReferral() {
+        var address = web3.eth.coinbase;
+        console.log('Logged in as: '+address);
+        Contract.countReferral(address,function(error, result) {
+            if (!error) {
+              document.getElementById('count_ref').innerHTML =  result;
+            } else {
+              console.log('Not Logged in');
+            }
+        });
+      };
+      function getMyBetsl() {
+        var address = web3.eth.coinbase;
+        Contract.playerBets(address,function(error, result) {
+            if (!error) {
+              document.getElementById('count_bets').innerHTML =  result;
+            } else {
+              console.log('Not Logged in');
+            }
+        });
+      };
       var count = parseInt(document.getElementById('count').innerHTML);
       var bet_history = [];
       var bet_timestamp = [];
@@ -146,7 +171,7 @@
             bet_timestamp = [];
             bet_history = [];
             count = 0;
-            document.getElementById('history').innerHTML = "<h4>Your Bets : </h4>";
+            document.getElementById('history').innerHTML = "<h4><span id=\"count\">0</span> Bets </h4>";
             document.getElementById('count').innerHTML = count;
             if (!error) {
               document.getElementById('response').innerHTML = 'Success: <a target="_blank" href="https://ropsten.etherscan.io/tx/' + result + '"> View Transaction </a>'
@@ -161,7 +186,7 @@
         if (guess != ""){
           bet_history.push(guess);
           bet_timestamp.push(parseInt(Date.parse(guess)/1000));
-          history_html = "<h4 style='text-align:center' >Your Bets <span id=\"count\">0</span>:</h4>";
+          history_html = "<h4 style='text-align:center' ><span id=\"count\">0</span> Bets </h4>";
           for (var i = 0; i < bet_history.length; i++){
               history_html += "<h5 style='text-align:center'>" + bet_history[i] + "</h5>";
           }
@@ -175,6 +200,8 @@
 
     <script>
       $(document).ready(function() {
+        getReferral();
+        getMyBetsl();
         $('.datepick').flatpickr({minDate: "today" });
       });
     </script>

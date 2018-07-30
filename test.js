@@ -38,6 +38,7 @@ var data_dict = {
 	timestamp: 0,
 	betCount: 0,
 	price: 0,
+  leader:'0x7bd36863951561469f820b3e65e612172392b59a'
 };
 
 function update(contract, contractFuncName, key){
@@ -53,6 +54,7 @@ setInterval(function() {
 	update(Contract, "countPlayer", "players");
 	update(Contract, "countBet", "betCount");
 	update(Contract, "costPerTicket","price");
+  update(Contract, "leader","leader");
 	console.log("Current Clients : " + io.engine.clientsCount);
 
 }, 4000);
@@ -67,7 +69,8 @@ io.sockets.on('connection', function (socket) {
 			players: data_dict.players ,
 			estTimestamp: data_dict.timestamp,
 			bets: data_dict.betCount,
-			price: data_dict.price / 1000000000000000000
+			price: data_dict.price / 1000000000000000000,
+      leader: data_dict.leader
 		});
 	}, 1000);
 });
