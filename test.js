@@ -48,10 +48,9 @@ function update(contract, contractFuncName, key){
 }
 
 setInterval(function() {
-
-  	update(Contract, "rewardPool", "reward");
-  	update(Contract, "averageTimestamp", "timestamp");
-  	update(Contract, "countPlayer", "players");
+	update(Contract, "rewardPool", "reward");
+	update(Contract, "averageTimestamp", "timestamp");
+	update(Contract, "countPlayer", "players");
 	update(Contract, "countBet", "betCount");
 	update(Contract, "costPerTicket","price");
 	console.log("Current Clients : " + io.engine.clientsCount);
