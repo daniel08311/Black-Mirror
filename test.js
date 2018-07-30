@@ -57,6 +57,10 @@ app.get('/leaderboard',function(req,res){
 	res.sendFile(path.join(__dirname+'/leaderboard.html'));
 });
 
+app.get('/rules',function(req,res){
+	res.sendFile(path.join(__dirname+'/rules.html'));
+});
+
 var config = JSON.parse(fs.readFileSync('server-config.json', 'utf8'));
 
 var server = app.listen(config.port, config.ip, function () {
