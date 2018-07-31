@@ -17,6 +17,11 @@
 		var socket = io.connect();
 		socket.on('ref', function(message) {
 			$('#referral').text(message.referral);
+        	document.getElementById('brand_ref').href = "/?ref=" + message.referral;
+	        document.getElementById('rules_ref').href = "/rules?ref=" + message.referral;
+	        document.getElementById('home_ref').href = "/?ref=" + message.referral;
+	        document.getElementById('bet_ref').href = "/bet?ref=" + message.referral;
+	        document.getElementById('leaderboard_ref').href = "/leaderboard?ref=" + message.referral;
 		});
 		socket.on('data', function(message) {
         	$('#prize').text("Reward Pool : " + message.reward + " Ethers");
@@ -45,17 +50,16 @@
 
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="#">ETH Deadpool</a>
+      <a  id="brand_ref" class="navbar-brand" href="/">ETH Deadpool</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-          <a class="nav-item nav-link " href="/">Home</a>
-          <a class="nav-item nav-link " href="/rules">Rules</a>
-          <a class="nav-item nav-link active" href="/bet">Play</a>
-          <a class="nav-item nav-link" href="/leaderboard">Leaderboard</a>
-        </div>
+			<a id='home_ref' class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
+      		<a id='rules_ref' class="nav-item nav-link " href="/rules">Rules</a>
+          	<a id='bet_ref' class="nav-item nav-link" href="/bet">Play</a>
+          	<a id='leaderboard_ref' class="nav-item nav-link" href="/leaderboard">Leaderboard</a>        </div>
       </div>
     </nav>
     <div class="container">
@@ -63,8 +67,10 @@
         <H1>
           The Ethereum Deadpool - Donald Trump
         </H1>
-        <div id="meta-mask-required"></div>
       </div>
+
+      <div class="row justify-content-md-center my-2" id="meta-mask-required"></div>
+      <div class="row justify-content-md-center my-2" id="login-required"></div>
 
       <div class="row justify-content-md-center my-2">
         <img src="https://cdn.steemitimages.com/DQma2t28aGMBqRxbxz5FnJqJmrMQUJEB8mSqPAZEDpEr4r1/image.png" height="40%"></img>
@@ -111,7 +117,6 @@
                     <button class="btn btn-outline-secondary" onclick="add()">Add</button>
                   </div>
                 </div>
-
             </div>
             <div class="row justify-content-md-center my-2">
             	<div id="history">
@@ -134,13 +139,12 @@
             <div class="row justify-content-md-center my-2">
                <p>You have <span id="count_bets">0</span> bets.</p>
            </div>
+           <div id="test"></div>
           </div>
         </div>
       </div>
 
     </div>
-
-
 
     <!-- Modal -->
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -153,7 +157,7 @@
             </button>
           </div>
           <div class="modal-body">
-            http://ourdomainname/bet?ref=<span id="ref_link"></span>
+            http://ourdomainname/?ref=<span id="ref_link"></span>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -168,10 +172,13 @@
 			if (typeof web3 === 'undefined') {
 				document.getElementById('meta-mask-required').innerHTML = 'You need <a href="https://metamask.io/">MetaMask</a> browser plugin to run this example'
 			}
+			if(web3.eth.coinbase==null){
+	          document.getElementById('login-required').innerHTML = 'You need to login into MetaMask !';
+	        }
 		}
-		var abi = [ { "anonymous": false, "inputs": [ { "indexed": true, "name": "player", "type": "address" }, { "indexed": false, "name": "reward", "type": "uint256" } ], "name": "Payreward", "type": "event" }, { "constant": false, "inputs": [ { "name": "_timestamp", "type": "uint256" } ], "name": "announce", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "player", "type": "address" } ], "name": "Confirm", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "bets", "type": "uint256" }, { "indexed": true, "name": "player", "type": "address" } ], "name": "Bet", "type": "event" }, { "constant": false, "inputs": [ { "name": "_timestamps", "type": "uint256[]" }, { "name": "_referral", "type": "address" } ], "name": "bet", "outputs": [], "payable": true, "stateMutability": "payable", "type": "function" }, { "constant": false, "inputs": [], "name": "confirm", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [], "name": "defineWinner", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [], "name": "payWinners", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "payable": true, "stateMutability": "payable", "type": "constructor" }, { "payable": true, "stateMutability": "payable", "type": "fallback" }, { "constant": true, "inputs": [], "name": "announced", "outputs": [ { "name": "", "type": "bool" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "announcedTimeStamp", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "averageTimestamp", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "address" }, { "name": "", "type": "uint256" } ], "name": "betHistory", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "confirmed", "outputs": [ { "name": "", "type": "bool" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "confirmreward", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "costPerTicket", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "countBet", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "countConfirmed", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "countPlayer", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "address" } ], "name": "countReferral", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "countSecondWinners", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "countWinners", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "expireDate", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "gameOver", "outputs": [ { "name": "", "type": "bool" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "getBalance", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "_timestamp", "type": "uint256" } ], "name": "getBetsOnTimestamp", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "address" } ], "name": "hasConfirmed", "outputs": [ { "name": "", "type": "bool" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "init_fund", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "address" } ], "name": "isPlayer", "outputs": [ { "name": "", "type": "bool" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "leader", "outputs": [ { "name": "", "type": "address" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "leader_2", "outputs": [ { "name": "", "type": "address" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "leader_3", "outputs": [ { "name": "", "type": "address" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "maxCost", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "numOfConfirmationNeeded", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "owner", "outputs": [ { "name": "", "type": "address" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "address" } ], "name": "playerBets", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "readyToPay", "outputs": [ { "name": "", "type": "bool" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "address" } ], "name": "referral", "outputs": [ { "name": "", "type": "address" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "rewardPool", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "secondWinnerTimestamp", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "startDate", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "uint256" } ], "name": "timestampList", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "winnerTimestamp", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" } ];
+		var abi = [{"constant":true,"inputs":[{"name":"_timestamp","type":"uint256"}],"name":"getBetsOnTimestamp","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"isPlayer","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"startDate","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getBalance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"maxCost","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"countSecondWinners","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"leader","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"costPerTicket","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"uint256"}],"name":"betHistory","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"payWinners","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"confirmreward","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_timestamps","type":"uint256[]"},{"name":"_referral","type":"address"}],"name":"bet","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":true,"inputs":[],"name":"rewardPool","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"secondWinnerTimestamp","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"confirm","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"referral","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"readyToPay","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"announcedTimeStamp","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"numOfConfirmationNeeded","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"winnerTimestamp","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"countBet","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"leader_3","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"countWinners","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"confirmed","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"countPlayer","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"expireDate","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"announced","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"timestampList","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"gameOver","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"countReferral","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"init_fund","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"playerBets","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"payLeaderAndDev","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"locked","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"hasConfirmed","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_timestamp","type":"uint256"}],"name":"announce","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"averageTimestamp","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"defineWinner","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"countConfirmed","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"leader_2","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[],"payable":true,"stateMutability":"payable","type":"constructor"},{"payable":true,"stateMutability":"payable","type":"fallback"},{"anonymous":false,"inputs":[{"indexed":false,"name":"bets","type":"uint256"},{"indexed":true,"name":"player","type":"address"}],"name":"Bet","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"player","type":"address"}],"name":"Confirm","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"player","type":"address"},{"indexed":false,"name":"reward","type":"uint256"}],"name":"Payreward","type":"event"}];
 
-		var Contract = web3.eth.contract(abi).at("0x4dd7f897dec352da768af447a52d16226eb44326");
+		var Contract = web3.eth.contract(abi).at("0x03A9e2792Ce81A764273Bd96a9C0f1ebB3f1328d");
 		var count = parseInt(document.getElementById('count').innerHTML);
 		var bet_history = [];
 		var bet_timestamp = [];
@@ -211,25 +218,49 @@
 			document.getElementById('ref_link').innerHTML =  web3.eth.coinbase;
 		};
 
-		function send() {
-			price = document.getElementById('price').innerHTML;
-			Contract.bet(bet_timestamp,"0x4dd7f897dec352da768af447a52d16226eb44326",{
-			    from:web3.eth.coinbase,
-			    gas: 400000*count,
-			    gasPrice: web3.toWei(3, 'gwei'),
-			    value: web3.toWei(price*count, 'ether')
-			  },function(error, result) {
-			    bet_timestamp = [];
-			    bet_history = [];
-			    count = 0;
-			    document.getElementById('history').innerHTML = "<p><span id=\"count\">0</span> Bets </p>";
-			    document.getElementById('count').innerHTML = count;
+		function getHistory() {
+			var address = web3.eth.coinbase;
+			if (address == null){
+				document.getElementById('test').innerHTML =  "You are not logged in";
+			}
+			console.log('Logged in as: '+address);
+			Contract.countReferral(address,function(error, result) {
 			    if (!error) {
-			      document.getElementById('response').innerHTML = 'Success: <a target="_blank" href="https://ropsten.etherscan.io/tx/' + result + '"> View Transaction </a>'
+			      document.getElementById('count_ref').innerHTML =  result;
 			    } else {
-			      document.getElementById('response').innerHTML = '<pre>' + error + '</pre>'
+			      console.log('Not Logged in');
 			    }
 			});
+		};
+
+		function send() {
+			price = document.getElementById('price').innerHTML;
+			var ref_addr = document.getElementById('referral').innerHTML;
+			if(web3.eth.coinbase!=null){
+				if(web3.isAddress(ref_addr)){
+					Contract.bet(bet_timestamp,ref_addr,{
+					    from:web3.eth.coinbase,
+					    gas: 400000*count,
+					    gasPrice: web3.toWei(3, 'gwei'),
+					    value: web3.toWei(price*count, 'ether')
+					  },function(error, result) {
+					    bet_timestamp = [];
+					    bet_history = [];
+					    count = 0;
+					    document.getElementById('history').innerHTML = "<p><span id=\"count\">0</span> Bets </p>";
+					    document.getElementById('count').innerHTML = count;
+					    if (!error) {
+					      document.getElementById('response').innerHTML = 'Success: <a target="_blank" href="https://ropsten.etherscan.io/tx/' + result + '"> View Transaction </a>'
+					    } else {
+					      document.getElementById('response').innerHTML = '<pre>' + error + '</pre>'
+					    }
+					});
+				}
+				else
+					alert("Invalid Referral Address");
+			}
+			else
+				alert("Please login to Metamask fisrt!");
 		};
 		function add() {
 			var guess = document.getElementById('guess').value;
@@ -254,6 +285,7 @@
         getReferral();
         getMyBetsl();
         ref();
+        getHistory();
         $('.datepick').flatpickr({minDate: "today" });
       });
     </script>
