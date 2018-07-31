@@ -21,15 +21,14 @@ library SafeMath {
 contract BlackChain {
     using SafeMath for uint256;
 
-    uint256 public costPerTicket = 5000000000000000;    // Init with 0.005 ETH per bet
-    uint256 public maxCost = 30000000000000000;         // Price increase every 7 days until 0.03 ETH
+    uint256 public costPerTicket = 7500000000000000;    // Init with 0.0075 ETH per bet
+    uint256 public maxCost = 25000000000000000;         // Price increase every 7 days until 0.025 ETH
     // test 2.0
-    // uint256 constant public expireDate = 1543622400;    // Contract refused to get any more bets after Dec 1, 2018
-    uint256 constant public expireDate = 1533027600;
+    uint256 constant public expireDate = 1543622400;    // Contract refused to get any more bets after Dec 1, 2018
+    // uint256 constant public expireDate = 1533027600;
 
     bool public confirmed;
     bool public announced;
-    bool public readyToPay;
     bool public gameOver;
     bool public locked;
     bool private developmentPaid;
@@ -54,9 +53,6 @@ contract BlackChain {
     uint256 public averageTimestamp;
 
     uint256 public numOfConfirmationNeeded;
-    uint256 private tmp_error;
-    uint256 private min_error_2 = 86400000;
-    uint256 private min_error = 86400000;
     uint256 private share = 0;
 
     uint256 public winnerTimestamp = 0;
@@ -65,18 +61,17 @@ contract BlackChain {
 
 
     constructor() payable public {
-        owner = msg.sender;
-        leader = msg.sender;
+        owner = 0xD29C684C272ca7BEb3B54Ed876acF8C784a84fD1;
+        leader = 0xD29C684C272ca7BEb3B54Ed876acF8C784a84fD1;
         leader_2 = msg.sender;
-        leader_3 = msg.sender;
+        leader_3 = 0xF06A984d59E64687a7Fd508554eB8763899366EE;
         countWeek = 1;
-        numOfConfirmationNeeded =3;
+        numOfConfirmationNeeded =100;
         startDate = now;
         rewardPool = msg.value;
         init_fund = msg.value;
         announced = false;
         confirmed = false;
-        readyToPay = false;
         gameOver = false;
         locked = false;
     }
@@ -122,14 +117,16 @@ contract BlackChain {
                 countReferral[_referral]+=1;
             }
 
-            if(playerBets[msg.sender]>playerBets[leader]){
-                leader_3 = leader_2;
+            if(playerBets[msg.sender]>playerBets[leader] && msg.sender!=leader){
+                if(msg.sender!=leader_2){
+                    leader_3 = leader_2;
+                }
                 leader_2 = leader;
                 leader = msg.sender;
-            }else if(playerBets[msg.sender]>playerBets[leader_2]){
+            }else if(playerBets[msg.sender]>playerBets[leader_2] && msg.sender !=leader_2 && msg.sender != leader){
                 leader_3 = leader_2;
                 leader_2 = msg.sender;
-            }else if(playerBets[msg.sender]>playerBets[leader_3]){
+            }else if(playerBets[msg.sender]>playerBets[leader_3] && msg.sender !=leader_2 && msg.sender != leader && msg.sender != leader_3){
                 leader_3 = msg.sender;
             }
 
@@ -143,11 +140,10 @@ contract BlackChain {
             owner.transfer(msg.value);
         }
         // Increase Ticket Price every week
-        // if(startDate.add(countWeek.mul(604800)) < now ){
-        if(startDate.add(countWeek.mul(3600)) < now ){
+        if(startDate.add(countWeek.mul(604800)) < now ){
             countWeek++;
             if(costPerTicket < maxCost){
-                costPerTicket=costPerTicket.add(5000000000000000);
+                costPerTicket=costPerTicket.add(2500000000000000);
             }
         }
     }
@@ -170,10 +166,18 @@ contract BlackChain {
         return mirrors[_timestamp].length;
     }
 
-    function announce(uint256 _timestamp) public {
+    function announce(uint256 _timestamp, uint256 _winnerTimestamp_1, uint256 _winnerTimestamp_2) public {
         require(msg.sender == owner);
         announced = true;
+
         announcedTimeStamp = _timestamp;
+        // Announce winners
+        winnerTimestamp = _winnerTimestamp_1;
+        secondWinnerTimestamp = _winnerTimestamp_2;
+
+        countWinners = mirrors[winnerTimestamp].length;
+        countSecondWinners = mirrors[secondWinnerTimestamp].length;
+
         //5% of total rewardPool goes as confirmreward
         confirmreward = rewardPool.mul(5).div(100).div(numOfConfirmationNeeded);
     }
@@ -196,39 +200,8 @@ contract BlackChain {
         }
     }
 
-    function defineWinner() public{
-        require(confirmed);
-        for(i=0; i<timestampList.length; i++ ){
-
-            if(timestampList[i]==winnerTimestamp || timestampList[i]==secondWinnerTimestamp){
-                continue;
-            }
-
-            if(timestampList[i] >= announcedTimeStamp){
-                tmp_error = timestampList[i].sub(announcedTimeStamp);
-            }
-            else{
-                tmp_error = announcedTimeStamp.sub(timestampList[i]);
-            }
-
-            if( tmp_error < min_error){
-                min_error_2 = min_error;
-                min_error = tmp_error;
-                secondWinnerTimestamp = winnerTimestamp;
-                winnerTimestamp = timestampList[i];
-            }
-            else if(tmp_error < min_error_2){
-                min_error_2 = tmp_error;
-                secondWinnerTimestamp = timestampList[i];
-            }
-        }
-        countWinners = mirrors[winnerTimestamp].length;
-        countSecondWinners = mirrors[secondWinnerTimestamp].length;
-        readyToPay = true;
-    }
-
     function payWinners() public{
-        require(readyToPay);
+        require(confirmed);
         require(!gameOver);
         // Send ETH(50%) to first prize winners
         share = rewardPool.div(2);
