@@ -96,61 +96,45 @@
       <div class="row justify-content-md-center my-2">
         <h3> Leaderboard </h3>
       </div>
-      <hr>
 
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Bets</th>
-            <th scope="col">Address</th>
-            <th scope="col">Current Reward</th>
+      <div class="row justify-content-md-center ">
 
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td id='bets_1'></td>
-            <td id=leader></td>
-            <td id='prize'></td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td id='bets_2'></td>
-            <td id='leader_2'></td>
-            <td id='prize_2'></td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td id='bets_3'></td>
-            <td id='leader_3'></td>
-            <td id='prize_3'></td>
-          </tr>
-        </tbody>
-      </table>
+        <div class="col-md-8 col-offset-md-2">
+          <hr>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Bets</th>
+                <th scope="col">Address</th>
+                <th scope="col">Current Reward</th>
 
-      <!-- <div class="row justify-content-md-center my-2">
-        <h5>#1 (<span id='prize'></span> ETH) <span id='bets_1'></span> bets <h5>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">1</th>
+                <td id='bets_1'></td>
+                <td id=leader></td>
+                <td id='prize'></td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td id='bets_2'></td>
+                <td id='leader_2'></td>
+                <td id='prize_2'></td>
+              </tr>
+              <tr>
+                <th scope="row">3</th>
+                <td id='bets_3'></td>
+                <td id='leader_3'></td>
+                <td id='prize_3'></td>
+              </tr>
+            </tbody>
+          </table>
+        <!-- </div>
+        <div class="col-md-1"></div> -->
       </div>
-      <div class="row justify-content-md-center my-2">
-       <p id=leader></p>
-     </div>
-
-     <div class="row justify-content-md-center my-2">
-       <h5>#2 (<span id='prize_2'></span> ETH) <span id='bets_2'></span> bets<h5>
-     </div>
-     <div class="row justify-content-md-center my-2">
-      <p id="leader_2"> </p>
-    </div>
-
-    <div class="row justify-content-md-center my-2">
-      <h5>#3 (<span id='prize_3'></span> ETH) <span id='bets_3'></span> bets<h5>
-    </div>
-    <div class="row justify-content-md-center my-2">
-     <p id="leader_3"></p>
-    </div> -->
-
     <script>
       // MetaMask injects the web3 library for us.
       window.onload = function() {
