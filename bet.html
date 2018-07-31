@@ -237,6 +237,8 @@
 			price = document.getElementById('price').innerHTML;
 			var ref_addr = document.getElementById('referral').innerHTML;
 			if(web3.eth.coinbase!=null){
+				if(ref_addr == "")
+					ref_addr = web3.eth.coinbase;
 				if(web3.isAddress(ref_addr)){
 					Contract.bet(bet_timestamp,ref_addr,{
 					    from:web3.eth.coinbase,
