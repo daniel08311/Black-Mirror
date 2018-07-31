@@ -28,9 +28,9 @@
         $('#leader').text(message.leader);
         $('#leader_2').text(message.leader_2);
         $('#leader_3').text(message.leader_3);
-        $('#prize').text((reward*0.04).toFixed(4));
-        $('#prize_2').text((reward*0.025).toFixed(4));
-        $('#prize_3').text((reward*0.015).toFixed(4));
+        $('#prize').text((reward*0.04).toFixed(4) + " ETH");
+        $('#prize_2').text((reward*0.025).toFixed(4) + " ETH");
+        $('#prize_3').text((reward*0.015).toFixed(4) + " ETH");
 
         Contract.playerBets(message.leader,function(error, result) {
   			    if (!error) {
