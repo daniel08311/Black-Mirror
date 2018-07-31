@@ -17,7 +17,7 @@ var app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-var owner = "0x12345";
+var owner = "0xD29C684C272ca7BEb3B54Ed876acF8C784a84fD1";
 
 app.get('/', function (req, res) {
 	var ref = owner;
