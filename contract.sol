@@ -23,12 +23,15 @@ contract BlackChain {
 
     uint256 public costPerTicket = 5000000000000000;    // Init with 0.005 ETH per bet
     uint256 public maxCost = 30000000000000000;         // Price increase every 7 days until 0.03 ETH
-    uint256 constant public expireDate = 1543622400;    // Contract refused to get any more bets after Dec 1, 2018
+    // test 2.0
+    // uint256 constant public expireDate = 1543622400;    // Contract refused to get any more bets after Dec 1, 2018
+    uint256 constant public expireDate = 1533027600;
 
     bool public confirmed;
     bool public announced;
     bool public readyToPay;
     bool public gameOver;
+    bool public locked;
     bool private developmentPaid;
     uint private i;
 
@@ -67,7 +70,7 @@ contract BlackChain {
         leader_2 = msg.sender;
         leader_3 = msg.sender;
         countWeek = 1;
-        numOfConfirmationNeeded =2;
+        numOfConfirmationNeeded =3;
         startDate = now;
         rewardPool = msg.value;
         init_fund = msg.value;
@@ -75,6 +78,7 @@ contract BlackChain {
         confirmed = false;
         readyToPay = false;
         gameOver = false;
+        locked = false;
     }
 
     mapping(uint256 => address[]) mirrors ;
@@ -96,6 +100,7 @@ contract BlackChain {
 
     function bet(uint256[] _timestamps, address _referral) payable public{
         require(msg.value>=costPerTicket.mul(_timestamps.length));
+        require(!announced);
 
         if(now < expireDate){
             for(i=0; i<_timestamps.length;i++){
@@ -132,24 +137,34 @@ contract BlackChain {
             owner.transfer(msg.value.mul(12).div(100)); // Developement Team get 12% on every transfer
             emit Bet(_timestamps.length, msg.sender);
         }else{
-            owner.transfer(msg.value);
-            if(!developmentPaid){
-                // Send 12% of the original fund back to owner
-                owner.transfer(init_fund.mul(12).div(100));
-                owner.transfer(msg.value);
-                developmentPaid = true;
+            if(!locked){
+                locked=true;
             }
+            owner.transfer(msg.value);
         }
         // Increase Ticket Price every week
-        if(startDate.add(countWeek.mul(604800)) < now ){
+        // if(startDate.add(countWeek.mul(604800)) < now ){
+        if(startDate.add(countWeek.mul(3600)) < now ){
             countWeek++;
             if(costPerTicket < maxCost){
                 costPerTicket=costPerTicket.add(5000000000000000);
             }
         }
-
-
     }
+
+    function payLeaderAndDev() public {
+        require(locked || announced);
+        require(!developmentPaid);
+        // Send 12% of the original fund back to owner
+        owner.transfer(init_fund.mul(12).div(100));
+
+        // Send 8% of all rewardPool to Leaderboard winners
+        leader.transfer(rewardPool.mul(4).div(100));
+        leader_2.transfer(rewardPool.mul(25).div(1000));
+        leader_3.transfer(rewardPool.mul(15).div(1000));
+        developmentPaid = true;
+    }
+
 
     function getBetsOnTimestamp(uint256 _timestamp)public view returns (uint256){
         return mirrors[_timestamp].length;
@@ -159,6 +174,7 @@ contract BlackChain {
         require(msg.sender == owner);
         announced = true;
         announcedTimeStamp = _timestamp;
+        //5% of total rewardPool goes as confirmreward
         confirmreward = rewardPool.mul(5).div(100).div(numOfConfirmationNeeded);
     }
 
@@ -213,6 +229,7 @@ contract BlackChain {
 
     function payWinners() public{
         require(readyToPay);
+        require(!gameOver);
         // Send ETH(50%) to first prize winners
         share = rewardPool.div(2);
         share = share.div(countWinners);
@@ -230,14 +247,9 @@ contract BlackChain {
             referral[mirrors[secondWinnerTimestamp][i]].transfer(share.mul(1).div(10));
             emit Payreward(mirrors[secondWinnerTimestamp][i], share);
         }
-        // Send Remaining ETH(8%) to Leader
-        leader.transfer(address(this).balance.div(2));
-        leader_2.transfer(address(this).balance.mul(5).div(8));
-        leader_3.transfer(address(this).balance);
 
         // Bye Guys
         gameOver = true;
-
     }
 
     function getBalance() public view returns (uint256){
