@@ -27,8 +27,8 @@
         document.getElementById('leaderboard_ref').href = "/leaderboard?ref=" + message.referral;
       });
       socket.on('data', function(message) {
-        $('#prize').text("Reward Pool : " + message.reward + " Ethers");
-        $('#players').text(message.players + " Players, " + message.bets + " Bets");
+        $('#prize').html ("Reward Pool : <b>" + message.reward + "</b> Ethers");
+        $('#players').html('<b>' + message.players + "</b> Players, <b>" + message.bets + "</b> Bets");
         var years, days, hours, minutes, seconds;
 
         if (message.estTimestamp > 0) {
@@ -101,10 +101,12 @@
       </div>
 
       <div class="row justify-content-md-center my-2">
-        <H4> Average Prediction Countdown:
-          <span id="estTimestamp">0 years 0 days, 00 hours 00 minutes 00 seconds </span>
-        </H4>
+        <H4> Average Prediction Countdown : </H4>
       </div>
+      <div class="row justify-content-md-center my-2">
+        <h5 id="estTimestamp">0 years 0 days, 00 hours 00 minutes 00 seconds </h5>
+      </div>
+
 
       <div class="row justify-content-md-center my-2">
         <H4 id="prize">
