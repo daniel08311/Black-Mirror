@@ -96,6 +96,7 @@ var data_dict = {
   leader:'0x7bd36863951561469f820b3e65e612172392b59a',
   leader_2:'0x7bd36863951561469f820b3e65e612172392b59a',
   leader_3:'0x7bd36863951561469f820b3e65e612172392b59a',
+  expireDate:0,
 };
 
 function update(contract, contractFuncName, key){
@@ -114,6 +115,7 @@ setInterval(function() {
 	update(Contract, "leader","leader");
   update(Contract, "leader_2","leader_2");
   update(Contract, "leader_3","leader_3");
+  update(Contract, "expireDate","expireDate");
 	console.log("Current Clients : " + io.engine.clientsCount);
 
 }, 4000);
@@ -130,7 +132,8 @@ io.sockets.on('connection', function (socket) {
 			price: data_dict.price / 1000000000000000000,
       leader: data_dict.leader,
       leader_2: data_dict.leader_2,
-      leader_3: data_dict.leader_3
+      leader_3: data_dict.leader_3,
+      expireDate: data_dict.expireDate
 		});
 	}, 1000);
 });
