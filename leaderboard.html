@@ -139,7 +139,7 @@
       // MetaMask injects the web3 library for us.
       window.onload = function() {
         if (typeof web3 === 'undefined') {
-          document.getElementById('meta-mask-required').innerHTML = 'You need <a href="https://metamask.io/">MetaMask</a> browser plugin to play'
+          document.getElementById('meta-mask-required').innerHTML = 'You need <a href="https://metamask.io/">&nbspMetaMask&nbsp</a> browser plugin to play'
         }
         if(web3.eth.coinbase==null){
           document.getElementById('login-required').innerHTML = 'You need to login into MetaMask !';
